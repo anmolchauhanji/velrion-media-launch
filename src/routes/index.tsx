@@ -10,8 +10,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const CREATOR_FORM = "https://docs.google.com/forms/d/17RI1Ta7Xb5aDlQZHpwM6ng76HFMSBUow5fL8jlcMhvo8/edit";
-const BRAND_FORM = "BRAND_FORM_LINK_HERE";
+const CREATOR_FORM = "https://docs.google.com/forms/d/17RI1Ta7Xb5aDlQZHpwM6ng76HFMSBUw5fL8jlcMhvo8/edit?usp=forms_home&ouid=102656956247665461918&ths=true";
+const BRAND_FORM = "https://docs.google.com/forms/d/1Ohi85Ti5AgKYrv1b101Wg3Lj90wDeiUxne7YwXrHYKE/edit?usp=forms_home&ouid=102656956247665461918&ths=true";
+const INSTAGRAM_URL = "https://www.instagram.com/velrionmedia/";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
