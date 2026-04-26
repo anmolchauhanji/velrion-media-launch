@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
 /*
  * Design system definition.
  *
@@ -63,25 +65,34 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
+  --background: oklch(0.08 0.005 60);
+  --foreground: oklch(0.96 0.01 80);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.78 0.13 85);
+  --primary-foreground: oklch(0.1 0.005 60);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
+  --muted: oklch(0.18 0.01 60);
+  --muted-foreground: oklch(0.65 0.02 70);
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
+  --border: oklch(0.78 0.13 85 / 0.18);
   --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --ring: oklch(0.78 0.13 85);
+  --gold: oklch(0.78 0.13 85);
+  --gold-bright: oklch(0.88 0.14 88);
+  --gold-deep: oklch(0.62 0.12 80);
+  --bg-elevated: oklch(0.12 0.008 60);
+  --bg-glass: oklch(0.14 0.008 60 / 0.55);
+  --gradient-gold: linear-gradient(135deg, oklch(0.88 0.14 88), oklch(0.62 0.12 80));
+  --gradient-radial-gold: radial-gradient(circle at 50% 0%, oklch(0.78 0.13 85 / 0.15), transparent 60%);
+  --shadow-gold: 0 10px 40px -10px oklch(0.78 0.13 85 / 0.45);
+  --shadow-gold-sm: 0 0 20px oklch(0.78 0.13 85 / 0.25);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +151,103 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .font-display {
+    font-family: 'Cormorant Garamond', serif;
+    letter-spacing: -0.01em;
+  }
+
+  .text-gold {
+    color: var(--gold);
+  }
+
+  .bg-gold {
+    background-color: var(--gold);
+  }
+
+  .border-gold {
+    border-color: var(--gold);
+  }
+
+  .gradient-gold-text {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .glass-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid oklch(0.78 0.13 85 / 0.18);
+    border-radius: 1rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card:hover {
+    border-color: oklch(0.78 0.13 85 / 0.5);
+    box-shadow: var(--shadow-gold);
+    transform: translateY(-4px);
+  }
+
+  .grain-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @keyframes float-particle {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+    50% { transform: translateY(-40px) translateX(20px); opacity: 0.8; }
+  }
+
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--gold);
+    animation: float-particle 6s ease-in-out infinite;
+  }
+
+  .cursor-glow {
+    position: fixed;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.78 0.13 85 / 0.6), transparent 70%);
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    transition: transform 0.15s ease-out;
+    mix-blend-mode: screen;
+  }
+
+  @media (max-width: 768px) {
+    .cursor-glow { display: none; }
   }
 }
