@@ -33,10 +33,14 @@ export const Route = createRootRoute({
       { name: "description", content: "India's premier fitness influencer marketing agency. We connect creators with brands that match their vision." },
       { name: "author", content: "Velrion Media" },
       { property: "og:title", content: "Velrion Media — Where Fitness Meets Influence" },
-      { property: "og:description", content: "India's premier fitness influencer marketing agency." },
+      { property: "og:description", content: "India's premier fitness influencer marketing agency. We connect creators with brands that match their vision." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Velrion Media — Where Fitness Meets Influence" },
+      { name: "twitter:description", content: "India's premier fitness influencer marketing agency. We connect creators with brands that match their vision." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5f257a29-d9ae-4234-b303-284170974229/id-preview-885b92fc--ec082d82-60d1-4b59-8f08-6591912efb80.lovable.app-1777174151892.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5f257a29-d9ae-4234-b303-284170974229/id-preview-885b92fc--ec082d82-60d1-4b59-8f08-6591912efb80.lovable.app-1777174151892.png" },
     ],
     links: [
       {
