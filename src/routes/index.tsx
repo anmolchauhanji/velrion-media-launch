@@ -486,7 +486,6 @@ function Index() {
         <Services />
         <HowItWorks />
         <WhyVelrion />
-        <Testimonials />
         <JoinUs />
         <Contact />
       </main>
