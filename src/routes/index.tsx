@@ -393,7 +393,7 @@ function Contact() {
             velrionmedia@gmail.com
           </a>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/velrionmedia/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-4 rounded-full glass-card text-foreground hover:text-gold"
@@ -424,7 +424,7 @@ function Footer() {
           <a href="mailto:velrionmedia@gmail.com" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Email">
             <Mail size={18} />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Instagram">
+          <a href="https://www.instagram.com/velrionmedia/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Instagram">
             <Instagram size={18} />
           </a>
         </div>
