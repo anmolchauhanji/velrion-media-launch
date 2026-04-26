@@ -10,8 +10,9 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const CREATOR_FORM = "https://docs.google.com/forms/d/17RI1Ta7Xb5aDlQZHpwM6ng76HFMSBUow5fL8jlcMhvo8/edit";
-const BRAND_FORM = "BRAND_FORM_LINK_HERE";
+const CREATOR_FORM = "https://docs.google.com/forms/d/17RI1Ta7Xb5aDlQZHpwM6ng76HFMSBUw5fL8jlcMhvo8/edit?usp=forms_home&ouid=102656956247665461918&ths=true";
+const BRAND_FORM = "https://docs.google.com/forms/d/1Ohi85Ti5AgKYrv1b101Wg3Lj90wDeiUxne7YwXrHYKE/edit?usp=forms_home&ouid=102656956247665461918&ths=true";
+const INSTAGRAM_URL = "https://www.instagram.com/velrionmedia/";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -283,46 +284,6 @@ function WhyVelrion() {
   );
 }
 
-function Testimonials() {
-  const items = [
-    { name: "Arjun Mehra", role: "Fitness Creator · 480K", quote: "Velrion landed me three brand deals in my first month. They actually understand creators." },
-    { name: "Nutrabuilt", role: "Sports Nutrition Brand", quote: "ROI was 4.2x on our launch campaign. The creator selection was surgical." },
-    { name: "Riya Kapoor", role: "Pilates Coach · 220K", quote: "Finally an agency that treats fitness creators with the seriousness we deserve." },
-  ];
-  const brands = ["NUTRABUILT", "IRONFORGE", "PROTEINX", "FLEXCO", "ALPHA WHEY", "MOVE/WEAR"];
-  return (
-    <section className="relative py-32 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16 reveal">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold mb-4">Social Proof</p>
-          <h2 className="font-display text-4xl md:text-5xl font-light">Trusted by creators & brands</h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6 mb-20">
-          {items.map((t) => (
-            <div key={t.name} className="reveal glass-card p-8">
-              <div className="text-gold text-2xl font-display mb-4">"</div>
-              <p className="text-foreground/90 mb-6 leading-relaxed">{t.quote}</p>
-              <div className="border-t border-gold/20 pt-4">
-                <div className="font-medium">{t.name}</div>
-                <div className="text-xs text-muted-foreground">{t.role}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="reveal flex flex-wrap items-center justify-center gap-x-12 gap-y-6 opacity-60">
-          {brands.map((b) => (
-            <span key={b} className="font-display text-xl tracking-[0.2em] text-muted-foreground hover:text-gold transition-colors">
-              {b}
-            </span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function JoinUs() {
   return (
     <section className="relative py-32 px-6 bg-[oklch(0.1_0.006_60)]">
@@ -392,7 +353,7 @@ function Contact() {
             velrionmedia@gmail.com
           </a>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/velrionmedia/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-6 py-4 rounded-full glass-card text-foreground hover:text-gold"
@@ -423,7 +384,7 @@ function Footer() {
           <a href="mailto:velrionmedia@gmail.com" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Email">
             <Mail size={18} />
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Instagram">
+          <a href="https://www.instagram.com/velrionmedia/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-gold transition-colors" aria-label="Instagram">
             <Instagram size={18} />
           </a>
         </div>
@@ -485,7 +446,6 @@ function Index() {
         <Services />
         <HowItWorks />
         <WhyVelrion />
-        <Testimonials />
         <JoinUs />
         <Contact />
       </main>
