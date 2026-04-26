@@ -390,7 +390,7 @@ function Footer() {
         </div>
 
         <div className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Velrion Media. All rights reserved.
+          © {new Date().getFullYear()} Velrion Media. All rights reserved
         </div>
       </div>
     </footer>
