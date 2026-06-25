@@ -1,14 +1,135 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-  Menu, X, CheckCircle, Zap, Shield, Target, Users, Flame,
-  Trophy, TrendingUp, Dumbbell, Calendar, Star, ChevronDown, Activity, ArrowRight,
-  Crosshair, Layers, Timer, UserCircle, Play
+  Menu, X, CheckCircle, Zap, Target, Users, Flame,
+  Trophy, TrendingUp, Star, ChevronDown, Activity, ArrowRight,
+  Crosshair, Layers, UserCircle
 } from "lucide-react";
+import { BrandLogo } from "@/components/ui/brand-logo";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
+
+/* ─────────────────────────────────────────
+   Shared waitlist modal
+───────────────────────────────────────── */
+function WaitlistModal({ onClose }: { onClose: () => void }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Close on overlay click
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === overlayRef.current) onClose();
+  };
+
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus("loading");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "007d77ca-1ca1-470e-8e35-c37d1dd77da2",
+          email,
+          subject: "New Waitlist Submission for Velrion",
+          from_name: "Velrion Landing Page",
+        }),
+      });
+      const data = await res.json();
+      if (data.success) { setStatus("success"); setEmail(""); }
+      else setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div
+      ref={overlayRef}
+      onClick={handleOverlayClick}
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+    >
+      <div className="relative w-full max-w-md glass-card border-[#00e5ff]/30 p-10 rounded-[2rem] shadow-2xl shadow-[#00e5ff]/10 animate-in zoom-in-95 duration-300">
+        {/* Close */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all"
+          aria-label="Close"
+        >
+          <X size={20} />
+        </button>
+
+        {status === "success" ? (
+          <div className="flex flex-col items-center gap-4 py-6 text-center">
+            <div className="w-16 h-16 rounded-full bg-[#39ff14]/20 flex items-center justify-center animate-bounce">
+              <CheckCircle className="text-[#39ff14]" size={32} />
+            </div>
+            <p className="font-bold text-2xl text-[#39ff14]">You're on the waitlist!</p>
+            <p className="text-white/60">Keep an eye on your inbox. We'll reach out soon.</p>
+            <button onClick={onClose} className="mt-4 px-6 py-3 bg-white/10 rounded-xl font-medium hover:bg-white/20 transition-all">
+              Close
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#00e5ff]/30 bg-[#00e5ff]/10 text-[#00e5ff] text-xs font-bold tracking-widest uppercase mb-4">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
+                Early Access
+              </div>
+              <h3 className="font-display text-3xl font-bold mb-2">Join the Waitlist</h3>
+              <p className="text-white/50 text-sm">Be first in line. No spam. Just your spot.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+              <input
+                type="email"
+                required
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[#00e5ff] transition-colors"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="w-full py-4 bg-[#00e5ff] text-black font-bold rounded-2xl hover:bg-white transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {status === "loading" ? "Joining..." : (<>Join Waitlist <ArrowRight size={18} /></>)}
+              </button>
+            </form>
+
+            {status === "error" && (
+              <p className="text-red-400 mt-3 text-sm text-center">Something went wrong. Please try again.</p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* Global modal state via a module-level event emitter pattern */
+let _openModal: (() => void) | null = null;
+export function openWaitlistModal() { _openModal?.(); }
+
+function useWaitlistModal() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => { _openModal = () => setOpen(true); return () => { _openModal = null; }; }, []);
+  return { open, setOpen };
+}
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,9 +155,8 @@ function Navbar() {
       }`}
     >
       <nav className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <a href="#" className="font-display text-3xl font-black tracking-tight flex items-center gap-2">
-          <Activity className="text-[#00e5ff]" size={28} />
-          <span>VELRO</span>
+        <a href="#" className="flex items-center gap-2">
+          <BrandLogo variant="horizontal" height={36} className="hover:scale-105 transition-transform" />
         </a>
 
         <div className="hidden md:flex items-center gap-8">
@@ -45,7 +165,7 @@ function Navbar() {
               {l.label}
             </a>
           ))}
-          <button className="text-sm font-bold px-6 py-2.5 rounded-full bg-[#00e5ff] text-black hover:bg-white transition-all hover:scale-105 active:scale-95">
+          <button onClick={openWaitlistModal} className="text-sm font-bold px-6 py-2.5 rounded-full bg-[#00e5ff] text-black hover:bg-white transition-all hover:scale-105 active:scale-95">
             Join Waitlist
           </button>
         </div>
@@ -62,7 +182,7 @@ function Navbar() {
               {l.label}
             </a>
           ))}
-          <button className="mt-2 w-full font-bold px-6 py-3 rounded-xl bg-[#00e5ff] text-black hover:bg-white transition-all">
+          <button onClick={openWaitlistModal} className="mt-2 w-full font-bold px-6 py-3 rounded-xl bg-[#00e5ff] text-black hover:bg-white transition-all">
             Join Waitlist
           </button>
         </div>
@@ -93,16 +213,13 @@ function Hero() {
           </h1>
 
           <p className="text-lg text-white/60 mb-10 max-w-lg leading-relaxed font-medium">
-            Velro is a gamified fitness consistency app. Hit daily missions, build streaks, earn XP, and stay accountable with squads. It's fitness, turned into a game.
+            Velrion is a gamified fitness consistency app. Hit daily missions, build streaks, earn XP, and stay accountable with squads. It's fitness, turned into a game.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="group relative px-8 py-4 bg-[#00e5ff] text-black font-bold rounded-2xl overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+            <button onClick={openWaitlistModal} className="group relative px-8 py-4 bg-[#00e5ff] text-black font-bold rounded-2xl overflow-hidden hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
               <span className="relative z-10 flex items-center gap-2">Join the Waitlist <ArrowRight size={20} /></span>
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
-            </button>
-            <button className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-              <Play size={20} className="text-[#9d4edd]" /> See How It Works
             </button>
           </div>
 
@@ -311,7 +428,7 @@ function Comparison() {
             <div className="absolute top-0 right-0 p-8 opacity-10">
               <Activity size={120} />
             </div>
-            <h3 className="font-display text-3xl font-bold text-[#00e5ff] mb-8">Velro</h3>
+            <h3 className="font-display text-3xl font-bold text-[#00e5ff] mb-8">Velrion</h3>
             <ul className="space-y-6 relative z-10">
               {['Daily missions', 'Streaks + XP', 'Challenge deadlines', 'Squads and competition', 'Consistency-focused system'].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-white font-medium">
@@ -336,7 +453,7 @@ function Personas() {
   return (
     <section className="py-24 px-6 bg-[#0a0a0f]">
       <div className="max-w-6xl mx-auto">
-        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-16 reveal">Who is Velro for?</h2>
+        <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-16 reveal">Who is Velrion for?</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {personas.map((p, i) => (
             <div key={i} className="glass-card p-8 reveal" style={{ transitionDelay: `${i * 100}ms` }}>
@@ -362,7 +479,7 @@ function PaidCohort() {
           Premium Offering
         </div>
         
-        <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 reveal">Join the next Velro batch</h2>
+        <h2 className="font-display text-4xl md:text-6xl font-bold mb-6 reveal">Join the next Velrion batch</h2>
         <p className="text-xl text-white/60 mb-12 max-w-2xl mx-auto reveal">
           30 days. One squad. One challenge. Real accountability with serious people.
         </p>
@@ -381,7 +498,7 @@ function PaidCohort() {
           ))}
         </div>
 
-        <button className="px-10 py-5 bg-[#9d4edd] text-white font-bold text-lg rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#9d4edd]/30 reveal">
+        <button onClick={openWaitlistModal} className="px-10 py-5 bg-[#9d4edd] text-white font-bold text-lg rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#9d4edd]/30 reveal">
           Reserve your spot
         </button>
       </div>
@@ -398,38 +515,92 @@ function AppPreview() {
         </div>
 
         <div className="flex justify-center gap-8 px-4 flex-wrap md:flex-nowrap reveal">
-          {/* Dashboard Placeholder */}
-          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-3xl bg-[#0f1115] border border-white/10 p-6 flex flex-col gap-4 shadow-2xl relative mt-0 md:mt-12">
-             <div className="h-10 w-full bg-white/5 rounded-lg" />
-             <div className="h-32 w-full bg-[#00e5ff]/10 border border-[#00e5ff]/20 rounded-2xl" />
-             <div className="h-16 w-full bg-white/5 rounded-xl mt-auto" />
-             <div className="h-16 w-full bg-white/5 rounded-xl" />
-             <div className="text-center text-xs text-white/40 mt-4 font-bold">Dashboard</div>
-          </div>
-          
-          {/* Mission Placeholder */}
-          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-3xl bg-[#0f1115] border border-white/10 p-6 flex flex-col gap-4 shadow-2xl z-10 border-[#9d4edd]/30">
-             <div className="h-20 w-full bg-white/5 rounded-2xl" />
-             <div className="space-y-3 mt-4">
-               {[1,2,3,4].map(i => <div key={i} className="h-14 w-full bg-white/5 rounded-xl" />)}
-             </div>
-             <button className="mt-auto h-12 w-full bg-[#39ff14] rounded-xl" />
-             <div className="text-center text-xs text-white/40 mt-2 font-bold">Daily Check-in</div>
-          </div>
-
-          {/* Squad Placeholder */}
-          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-3xl bg-[#0f1115] border border-white/10 p-6 flex flex-col gap-4 shadow-2xl mt-0 md:mt-12">
-             <div className="flex gap-3">
-               <div className="w-12 h-12 rounded-full bg-white/10" />
-               <div className="flex-1 space-y-2 py-2">
-                 <div className="h-3 w-1/2 bg-white/10 rounded" />
-                 <div className="h-3 w-3/4 bg-white/5 rounded" />
+          {/* Dashboard */}
+          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-[2rem] bg-[#0f1115] border border-white/10 p-5 flex flex-col gap-4 shadow-2xl relative mt-0 md:mt-12 overflow-hidden hover:-translate-y-2 transition-transform duration-500">
+             <div className="flex justify-between items-center mb-2">
+               <div>
+                 <div className="text-xs text-white/50 font-bold uppercase tracking-wider">Level 12</div>
+                 <div className="font-display font-bold text-lg">Pro Athlete</div>
+               </div>
+               <div className="w-10 h-10 rounded-full bg-[#00e5ff]/20 flex items-center justify-center border border-[#00e5ff]/50 shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+                 <Trophy className="text-[#00e5ff]" size={20} />
                </div>
              </div>
-             <div className="mt-4 space-y-4">
-               {[1,2,3].map(i => <div key={i} className="h-16 w-full bg-gradient-to-r from-white/5 to-transparent rounded-xl border border-white/5" />)}
+             <div className="p-4 bg-gradient-to-br from-[#00e5ff]/20 to-[#00e5ff]/5 border border-[#00e5ff]/20 rounded-2xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-[#00e5ff]/20 blur-3xl rounded-full" />
+               <div className="text-sm text-white/70 mb-1 relative z-10">Current Streak</div>
+               <div className="text-3xl font-display font-bold text-[#00e5ff] flex items-center gap-2 relative z-10">
+                 14 <Flame className="text-[#00e5ff]" size={24} />
+               </div>
              </div>
-             <div className="text-center text-xs text-white/40 mt-auto pt-4 font-bold">Squad Leaderboard</div>
+             <div className="flex-1" />
+             <div className="p-4 bg-white/5 rounded-2xl flex items-center justify-between border border-white/5">
+               <div className="text-sm font-medium">Weekly XP</div>
+               <div className="text-[#39ff14] font-bold">1,450</div>
+             </div>
+             <div className="p-4 bg-white/5 rounded-2xl flex items-center justify-between border border-white/5">
+               <div className="text-sm font-medium">Next Level</div>
+               <div className="text-white/50 text-sm">250 XP left</div>
+             </div>
+             <div className="text-center text-xs text-white/40 mt-2 font-bold uppercase tracking-widest">Dashboard</div>
+          </div>
+          
+          {/* Mission */}
+          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-[2rem] bg-[#0f1115] border border-[#9d4edd]/40 p-5 flex flex-col gap-4 shadow-[0_0_40px_rgba(157,78,221,0.15)] z-10 hover:-translate-y-2 transition-transform duration-500">
+             <div className="text-center pb-3 border-b border-white/10">
+               <div className="text-xs text-white/50 font-bold uppercase tracking-wider mb-1">Today</div>
+               <div className="font-display font-bold text-xl">Daily Missions</div>
+             </div>
+             <div className="space-y-3 mt-2">
+               {['Hit 10k Steps', 'Workout 45m', 'Eat 120g Protein', 'Sleep 8 Hours'].map((task, i) => (
+                 <div key={i} className={`p-3 rounded-xl flex items-center justify-between border transition-colors ${i < 2 ? 'bg-[#39ff14]/10 border-[#39ff14]/30' : 'bg-white/5 border-white/10'}`}>
+                   <span className={`text-sm font-medium ${i < 2 ? 'text-[#39ff14]' : 'text-white/70'}`}>{task}</span>
+                   {i < 2 ? <CheckCircle size={18} className="text-[#39ff14]" /> : <div className="w-4 h-4 rounded-full border-2 border-white/20" />}
+                 </div>
+               ))}
+             </div>
+             <div className="flex-1" />
+             <button className="h-12 w-full bg-[#39ff14] text-black font-bold rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(57,255,20,0.2)] hover:scale-[1.02] transition-transform">
+               Check In <CheckCircle size={18} />
+             </button>
+             <div className="text-center text-xs text-white/40 mt-2 font-bold uppercase tracking-widest">Missions</div>
+          </div>
+
+          {/* Squad */}
+          <div className="w-full md:w-1/3 aspect-[9/19] max-w-[300px] rounded-[2rem] bg-[#0f1115] border border-white/10 p-5 flex flex-col gap-4 shadow-2xl mt-0 md:mt-12 overflow-hidden hover:-translate-y-2 transition-transform duration-500">
+             <div className="flex gap-3 items-center pb-4 border-b border-white/10">
+               <div className="w-10 h-10 rounded-full bg-[#9d4edd]/20 flex items-center justify-center border border-[#9d4edd]/50 shadow-[0_0_15px_rgba(157,78,221,0.2)]">
+                 <Users className="text-[#9d4edd]" size={20} />
+               </div>
+               <div>
+                 <div className="font-bold text-sm">Alpha Squad</div>
+                 <div className="text-xs text-[#9d4edd]">Rank #2 this week</div>
+               </div>
+             </div>
+             <div className="mt-2 space-y-3">
+               {[
+                 { name: 'Alex M.', xp: '4,200', active: false },
+                 { name: 'You', xp: '3,850', active: true },
+                 { name: 'Sarah J.', xp: '3,100', active: false },
+               ].map((u, i) => (
+                 <div key={i} className={`p-3 rounded-xl flex items-center justify-between border ${u.active ? 'bg-white/10 border-white/20' : 'bg-white/5 border-transparent'}`}>
+                   <div className="flex items-center gap-3">
+                     <div className="text-white/40 text-xs font-bold w-4">{i + 1}</div>
+                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-white/20 to-white/5" />
+                     <span className="text-sm font-medium">{u.name}</span>
+                   </div>
+                   <span className="text-xs font-bold text-[#00e5ff]">{u.xp}</span>
+                 </div>
+               ))}
+             </div>
+             <div className="flex-1" />
+             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="text-xs text-white/60">Squad Goal Progress</div>
+                <div className="h-1.5 w-full bg-white/10 rounded-full mt-2 overflow-hidden">
+                   <div className="h-full w-[80%] bg-[#9d4edd] rounded-full" />
+                </div>
+             </div>
+             <div className="text-center text-xs text-white/40 mt-2 font-bold uppercase tracking-widest">Leaderboard</div>
           </div>
         </div>
       </div>
@@ -439,8 +610,8 @@ function AppPreview() {
 
 function FAQ() {
   const faqs = [
-    { q: "Is Velro a workout app?", a: "No. Velro is an accountability and consistency system. We give you missions, you do the work using your preferred routine, and check in here." },
-    { q: "Do I need a gym?", a: "No. Your missions can be customized. If your goal is home workouts or just step counts, Velro works perfectly." },
+    { q: "Is Velrion a workout app?", a: "No. Velrion is an accountability and consistency system. We give you missions, you do the work using your preferred routine, and check in here." },
+    { q: "Do I need a gym?", a: "No. Your missions can be customized. If your goal is home workouts or just step counts, Velrion works perfectly." },
     { q: "Is it for beginners?", a: "Yes, it is designed specifically for beginners who struggle to stay consistent." },
     { q: "How do squads work?", a: "You are matched with a small group of users with similar goals. You compete on a private leaderboard and keep each other accountable." },
     { q: "What's included in the paid batch?", a: "The paid cohort gives you access to a premium squad, a strict 30-day challenge, and a highly serious environment." },
@@ -469,83 +640,18 @@ function FAQ() {
 }
 
 function CTA() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    
-    setStatus("loading");
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: "YOUR_WEB3FORMS_ACCESS_KEY_HERE",
-          email: email,
-          subject: "New Waitlist Submission for Velro",
-          from_name: "Velro Landing Page"
-        }),
-      });
-      
-      const data = await res.json();
-      if (data.success) {
-        setStatus("success");
-        setEmail("");
-      } else {
-        setStatus("error");
-      }
-    } catch (err) {
-      setStatus("error");
-    }
-  };
-
   return (
     <section id="cta" className="py-32 px-6 relative overflow-hidden">
       <div className="absolute inset-0 bg-[#00e5ff]/5" />
       <div className="max-w-4xl mx-auto text-center relative z-10 glass-card p-12 md:p-20 border-[#00e5ff]/30 reveal">
-        <h2 className="font-display text-5xl md:text-7xl font-bold mb-6">Stop restarting.<br/>Join Velro.</h2>
+        <h2 className="font-display text-5xl md:text-7xl font-bold mb-6">Stop restarting.<br/>Join Velrion.</h2>
         <p className="text-xl text-[#00e5ff] font-medium mb-12">Daily missions. Streaks. Squads. Accountability.</p>
-        
-        {status === "success" ? (
-          <div className="max-w-md mx-auto p-8 rounded-[2rem] bg-white/5 border border-[#39ff14]/30 text-white flex flex-col items-center gap-4 reveal">
-            <div className="w-16 h-16 rounded-full bg-[#39ff14]/20 flex items-center justify-center">
-              <CheckCircle className="text-[#39ff14]" size={32} />
-            </div>
-            <div>
-              <p className="font-bold text-xl text-[#39ff14] mb-1">You're on the waitlist!</p>
-              <p className="text-sm text-white/60">Keep an eye on your inbox for updates.</p>
-            </div>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-            <input 
-              type="email" 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email" 
-              className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-[#00e5ff] transition-colors"
-            />
-            <button 
-              type="submit" 
-              disabled={status === "loading"}
-              className="px-8 py-4 bg-[#00e5ff] text-black font-bold rounded-2xl hover:bg-white transition-all whitespace-nowrap disabled:opacity-50 flex items-center justify-center min-w-[140px]"
-            >
-              {status === "loading" ? "Joining..." : "Join Waitlist"}
-            </button>
-          </form>
-        )}
-        {status === "error" && (
-          <p className="text-red-500 mt-4 text-sm font-medium reveal">Something went wrong. Please try again.</p>
-        )}
-        <p className="text-xs text-white/30 mt-6 max-w-sm mx-auto">
-          ⚠️ Developer: Replace <code className="text-[#00e5ff]">YOUR_WEB3FORMS_ACCESS_KEY_HERE</code> in <code className="text-[#00e5ff]">src/routes/index.tsx</code> with a free access key from <a href="https://web3forms.com/" target="_blank" className="underline hover:text-[#00e5ff]">web3forms.com</a> to receive emails instantly.
-        </p>
+        <button
+          onClick={openWaitlistModal}
+          className="px-10 py-5 bg-[#00e5ff] text-black font-bold text-lg rounded-2xl hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#00e5ff]/30 flex items-center gap-2 mx-auto"
+        >
+          Join the Waitlist <ArrowRight size={20} />
+        </button>
       </div>
     </section>
   );
@@ -556,18 +662,17 @@ function Footer() {
     <footer className="py-12 px-6 border-t border-white/10 bg-[#050508]">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex items-center gap-2">
-          <Activity className="text-[#00e5ff]" size={24} />
-          <span className="font-display text-2xl font-black tracking-tight">VELRO</span>
+          <BrandLogo variant="horizontal" height={30} />
         </div>
         
         <div className="flex gap-8 text-sm font-medium text-white/50">
           <a href="#" className="hover:text-white">Twitter</a>
-          <a href="#" className="hover:text-white">Instagram</a>
-          <a href="#" className="hover:text-white">Contact</a>
+          <a href="https://insta.openinapp.co/mi87s" target="_blank" rel="noopener noreferrer" className="hover:text-white">Instagram</a>
+          <a href="mailto:velrionmedia@gmail.com" className="hover:text-white">Contact</a>
         </div>
         
         <div className="text-sm text-white/30">
-          © {new Date().getFullYear()} Velro. All rights reserved.
+          © {new Date().getFullYear()} Velrion. All rights reserved.
         </div>
       </div>
     </footer>
@@ -595,8 +700,10 @@ function useReveal() {
 
 function Index() {
   useReveal();
+  const { open, setOpen } = useWaitlistModal();
   return (
     <div className="relative min-h-screen bg-background text-foreground selection:bg-[#00e5ff]/30">
+      {open && <WaitlistModal onClose={() => setOpen(false)} />}
       <Navbar />
       <main>
         <Hero />

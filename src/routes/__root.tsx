@@ -1,4 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import * as React from "react";
+import logoUrl from "../Black and Green Modern Fitness Gym Logo_20260625_101204_0000.png";
 
 import appCss from "../styles.css?url";
 
@@ -69,5 +71,92 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  React.useEffect(() => {
+    const img = new Image();
+    img.src = logoUrl;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+
+      // Scan only the top half (for the S icon symbol)
+      const scanMaxY = Math.floor(img.height * 0.51);
+      const imageData = ctx.getImageData(0, 0, canvas.width, scanMaxY);
+      const data = imageData.data;
+
+      let minX = canvas.width;
+      let maxX = 0;
+      let minY = canvas.height;
+      let maxY = 0;
+
+      for (let y = 0; y < scanMaxY; y++) {
+        for (let x = 0; x < canvas.width; x++) {
+          const idx = (y * canvas.width + x) * 4;
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
+          const brightness = (r + g + b) / 3;
+
+          if (brightness > 20) {
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
+            if (y < minY) minY = y;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      if (maxX >= minX && maxY >= minY) {
+        // Crop the icon with tiny padding
+        const padding = 5;
+        minX = Math.max(0, minX - padding);
+        minY = Math.max(0, minY - padding);
+        maxX = Math.min(canvas.width, maxX + padding);
+        maxY = Math.min(scanMaxY, maxY + padding);
+
+        const cropWidth = maxX - minX;
+        const cropHeight = maxY - minY;
+
+        const croppedImageData = ctx.getImageData(minX, minY, cropWidth, cropHeight);
+        const croppedData = croppedImageData.data;
+
+        // Transparent background
+        for (let i = 0; i < croppedData.length; i += 4) {
+          const r = croppedData[i];
+          const g = croppedData[i + 1];
+          const b = croppedData[i + 2];
+          const brightness = (r + g + b) / 3;
+          if (brightness < 20) {
+            croppedData[i + 3] = 0;
+          }
+        }
+
+        const tempCanvas = document.createElement("canvas");
+        const tempCtx = tempCanvas.getContext("2d");
+        if (tempCtx) {
+          tempCanvas.width = cropWidth;
+          tempCanvas.height = cropHeight;
+          tempCtx.putImageData(croppedImageData, 0, 0);
+
+          const faviconUrl = tempCanvas.toDataURL("image/png");
+
+          // Find or create favicon link tag
+          let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+          if (!link) {
+            link = document.createElement("link");
+            document.head.appendChild(link);
+          }
+          link.type = "image/png";
+          link.rel = "shortcut icon";
+          link.href = faviconUrl;
+        }
+      }
+    };
+  }, []);
+
   return <Outlet />;
 }
