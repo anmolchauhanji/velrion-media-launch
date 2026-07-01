@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildMatch | Delhi NCR's #1 Contractor Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0F1F3D;
+            --blue: #1A56DB;
+            --orange: #F97316;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-muted: #94a3b8;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Background Animation */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(26, 86, 219, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.1) 0%, transparent 40%);
+        }
+
+        .floating-dots {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+            background-image: radial-gradient(var(--white) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: moveDots 60s linear infinite;
+        }
+
+        @keyframes moveDots {
+            from { background-position: 0 0; }
+            to { background-position: 400px 400px; }
+        }
+
+        /* Utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1e429f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 86, 219, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: var(--glass);
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .accent {
+            color: var(--orange);
+        }
+
+        /* Hero */
+        #hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+        }
+
+        #hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 800;
+        }
+
+        #hero p {
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            padding: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 1s; }
+        .stat-card:nth-child(3) { animation-delay: 2s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--orange);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Social Proof Bar */
+        #social-proof {
+            padding: 40px 0;
+            background: rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .marquee {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .marquee span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* How It Works */
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .step-card {
+            padding: 40px;
+            position: relative;
+        }
+
+        .step-num {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 4rem;
+            font-weight: 900;
+            opacity: 0.1;
+            color: var(--blue);
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .step-card h3 {
+            margin-bottom: 15px;
+        }
+
+        /* Categories Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .cat-card {
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .cat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--blue);
+            box-shadow: 0 10px 30px rgba(26, 86, 219, 0.2);
+            background: rgba(26, 86, 219, 0.05);
+        }
+
+        .cat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Why BuildMatch */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .benefit-card {
+            padding: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+        }
+
+        /* Testimonials */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .test-card {
+            padding: 30px;
+        }
+
+        .test-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #2a3a5a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--blue);
+        }
+
+        .stars {
+            color: #fbbf24;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .quote {
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        /* Form Section */
+        #registration {
+            background: rgba(26, 86, 219, 0.05);
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(26, 86, 219, 0.2);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-checkmarks {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+        }
+
+        /* Success State */
+        #form-success {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 200px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 100px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* WhatsApp Button */
+        .wa-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+            transition: var(--transition);
+        }
+
+        .wa-float:hover {
+            transform: scale(1.1);
+        }
+
+        /* Mobile Sticky CTA */
+        .mobile-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            background: var(--navy);
+            border-top: 1px solid var(--glass-border);
+            display: none;
+            z-index: 998;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #ef4444;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+
+        #toast.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .benefits-grid { grid-template-columns: 1fr; }
+            .hero-stats { grid-template-columns: 1fr; gap: 10px; }
+            .mobile-cta { display: block; }
+            #hero { padding-top: 80px; }
+            .section-header h2 { font-size: 2rem; }
+            .form-container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-mesh"></div>
+    <div class="floating-dots"></div>
+
+    <div id="toast">Error message here</div>
+
+    <a href="https://wa.me/91XXXXXXXXXX" class="wa-float" target="_blank">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    </a>
+
+    <div class="mobile-cta">
+        <a href="#registration" class="btn btn-primary" style="width: 100%">Join Free →</a>
+    </div>
+
+    <div class="container">
+        <!-- HERO SECTION -->
+        <section id="hero" class="visible">
+            <div>
+                <h1>Apka Kaam, <span class="accent">Hamari Reach</span></h1>
+                <p>Delhi NCR ke verified contractors ke liye free platform — genuine customer leads, seedha aapke paas.</p>
+                <div class="hero-ctas">
+                    <a href="#registration" class="btn btn-primary">Free Mein Join Karo</a>
+                    <a href="#how-it-works" class="btn btn-outline">Kaise Kaam Karta Hai</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="glass stat-card">
+                        <span class="stat-val" data-target="200">0</span>
+                        <span class="stat-label">Contractors Joined</span>
+                    </div>
+                    <div class="glass stat-card">
+                        <span class="stat-val" data-target="200000">0</span>
+                        <span class="stat-label">Avg Project Value</span>
+                    </div>
+                    <div class="glass stat-card">
+                        <span class="stat-val">Delhi NCR</span>
+                        <span class="stat-label">Active Region</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SOCIAL PROOF -->
+        <div id="social-proof">
+            <div class="marquee">
+                <span>Verified Leads</span>
+                <span>Zero Commission</span>
+                <span>Direct Contact</span>
+                <span>Delhi NCR Only</span>
+                <span>Premium Projects</span>
+                <span>Verified Leads</span>
+                <span>Zero Commission</span>
+                <span>Direct Contact</span>
+                <span>Delhi NCR Only</span>
+                <span>Premium Projects</span>
+            </div>
+        </div>
+
+        <!-- HOW IT WORKS -->
+        <section id="how-it-works">
+            <div class="section-header">
+                <h2>Kaise Kaam <span class="accent">Karta Hai?</span></h2>
+            </div>
+            <div class="step-grid">
+                <div class="glass step-card">
+                    <div class="step-num">01</div>
+                    <div class="step-icon">👤</div>
+                    <h3>Profile Banao</h3>
+                    <p>Apna registration complete karein bilkul free, sirf 2 minute mein.</p>
+                </div>
+                <div class="glass step-card">
+                    <div class="step-num">02</div>
+                    <div class="step-icon">🔔</div>
+                    <h3>Leads Payein</h3>
+                    <p>Aapke area aur kaam ke hisab se verified projects ki notification milegi.</p>
+                </div>
+                <div class="glass step-card">
+                    <div class="step-num">03</div>
+                    <div class="step-icon">💰</div>
+                    <h3>Kaam Jeeto</h3>
+                    <p>Customer se direct baat karein, quote dein aur apna business badhayein.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section id="categories">
+            <div class="section-header">
+                <h2>Kaun Join Kar <span class="accent">Sakta Hai?</span></h2>
+            </div>
+            <div class="category-grid">
+                <div class="glass cat-card">
+                    <span class="cat-icon">🪚</span>
+                    <h4>Carpenter</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🖌️</span>
+                    <h4>Painter</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">⚡</span>
+                    <h4>Electrician</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🔧</span>
+                    <h4>Plumber</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🏠</span>
+                    <h4>Interior Designer</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🧱</span>
+                    <h4>Civil Contractor</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🍳</span>
+                    <h4>Modular Kitchen</h4>
+                </div>
+                <div class="glass cat-card">
+                    <span class="cat-icon">🪟</span>
+                    <h4>Tile & Flooring</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY BUILDMATCH -->
+        <section id="benefits">
+            <div class="section-header">
+                <h2>BuildMatch <span class="accent">Kyun?</span></h2>
+            </div>
+            <div class="benefits-grid">
+                <div class="glass benefit-card">
+                    <div class="benefit-icon">🆓</div>
+                    <div>
+                        <h4>Free Leads</h4>
+                        <p>Koi Justdial ya registration fees nahi. Genuine customers se seedha connect karein.</p>
+                    </div>
+                </div>
+                <div class="glass benefit-card">
+                    <div class="benefit-icon">✅</div>
+                    <div>
+                        <h4>Verified Badge</h4>
+                        <p>Humari verification ke baad aapki profile pe trust badge lagega jo customers ko pasand hai.</p>
+                    </div>
+                </div>
+                <div class="glass benefit-card">
+                    <div class="benefit-icon">📱</div>
+                    <div>
+                        <h4>Digital Portfolio</h4>
+                        <p>Apne purane kaam ki photos dikhayein aur market mein apni alag pehchan banayein.</p>
+                    </div>
+                </div>
+                <div class="glass benefit-card">
+                    <div class="benefit-icon">📍</div>
+                    <div>
+                        <h4>Apne Area Mein Kaam</h4>
+                        <p>Sirf wahi projects dikhenge jo aapke service area ke andar honge.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section id="testimonials">
+            <div class="section-header">
+                <h2>Kya Kehte Hain <span class="accent">Humare Sathi?</span></h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="glass test-card">
+                    <div class="test-user">
+                        <div class="avatar">RK</div>
+                        <div>
+                            <strong>Ramesh Kumar</strong>
+                            <p style="font-size: 0.8rem">Carpenter, Laxmi Nagar</p>
+                        </div>
+                    </div>
+                    <span class="stars">★★★★★</span>
+                    <p class="quote">"BuildMatch se judne ke baad mujhe Laxmi Nagar aur Preet Vihar se kaafi acche leads mile hain. Sabse acchi baat ye hai ki ye free hai."</p>
+                </div>
+                <div class="glass test-card">
+                    <div class="test-user">
+                        <div class="avatar">PS</div>
+                        <div>
+                            <strong>Priya Sharma</strong>
+                            <p style="font-size: 0.8rem">Interior Designer, Noida</p>
+                        </div>
+                    </div>
+                    <span class="stars">★★★★★</span>
+                    <p class="quote">"Pehle clients dhundne mein kaafi dikkat hoti thi. Ab BuildMatch pe projects aate hain aur main direct customers se deal karti hoon."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- REGISTRATION FORM -->
+        <section id="registration">
+            <div class="section-header">
+                <h2>Aaj Hi Join Karo — <span class="accent">Bilkul Free</span></h2>
+            </div>
+            <div class="glass form-container">
+                <form action="https://api.web3forms.com/submit" method="POST" id="leadForm">
+                    <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_KEY">
+                    <input type="hidden" name="subject" value="New Contractor Registration - BuildMatch">
+                    <input type="hidden" name="from_name" value="BuildMatch Lead Gen">
+
+                    <div class="form-group">
+                        <label for="full-name">Pura Naam (Full Name) *</label>
+                        <input type="text" id="full-name" name="name" class="form-control" placeholder="e.g. Rajesh Singh" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number (WhatsApp) *</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="10-digit number" pattern="[6789][0-9]{9}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email ID (Optional)</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="apka@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category Chunein *</label>
+                        <select id="category" name="category" class="form-control" required>
+                            <option value="">-- Chunein --</option>
+                            <option value="Carpenter">Carpenter</option>
+                            <option value="Painter">Painter</option>
+                            <option value="Electrician">Electrician</option>
+                            <option value="Plumber">Plumber</option>
+                            <option value="Interior Designer">Interior Designer</option>
+                            <option value="Civil Contractor">Civil Contractor</option>
+                            <option value="Modular Kitchen">Modular Kitchen</option>
+                            <option value="Tile & Flooring">Tile & Flooring</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Experience Kitna Hai? *</label>
+                        <select id="experience" name="experience" class="form-control" required>
+                            <option value="0-1">0-1 Year</option>
+                            <option value="1-3">1-3 Years</option>
+                            <option value="3-5">3-5 Years</option>
+                            <option value="5-10">5-10 Years</option>
+                            <option value="10+">10+ Years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="area">Service Area / Pincode *</label>
+                        <input type="text" id="area" name="area" class="form-control" placeholder="e.g. Laxmi Nagar, 110092" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="source">Humare Baare Mein Kaise Pata Chala?</label>
+                        <select id="source" name="source" class="form-control">
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="Friend">Friend</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.1rem;">
+                        Free Mein Register Karo → <span class="spinner" id="btnSpinner"></span>
+                    </button>
+
+                    <div class="form-checkmarks">
+                        <span>✓ Bilkul free</span>
+                        <span>✓ No spam</span>
+                        <span>✓ 2 minute mein done</span>
+                    </div>
+                </form>
+
+                <div id="form-success">
+                    <div class="checkmark-circle">✓</div>
+                    <h3>Dhanyawad!</h3>
+                    <p>Hamari team 24 ghante mein aapko call ya WhatsApp karegi.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="section-header">
+                <h2>Sawal <span class="accent">Jawab (FAQ)</span></h2>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div class="glass faq-item">
+                    <div class="faq-question">
+                        Kya ye bilkul free hai?
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Haan, joining aur basic features bilkul free hain. Humara maqsad Delhi NCR ke contractors ko digital platform dena hai.
+                    </div>
+                </div>
+                <div class="glass faq-item">
+                    <div class="faq-question">
+                        Kitne projects milenge?
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Ye aapke area aur category pe depend karta hai. Average hamare contractors ko mahine mein 3-5 verified leads milti hain.
+                    </div>
+                </div>
+                <div class="glass faq-item">
+                    <div class="faq-question">
+                        Kya main multiple categories mein kaam kar sakta hoon?
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Haan, aap registration ke baad apni profile mein aur categories bhi add kar sakte hain.
+                    </div>
+                </div>
+                <div class="glass faq-item">
+                    <div class="faq-question">
+                        Mujhe app download karni padegi?
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Nahi, abhi ke liye aap website se hi sara kaam kar sakte hain. Hamari mobile app jald hi launch hone wali hai.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <span class="footer-logo">BuildMatch</span>
+            <p>Delhi NCR ka #1 Contractor Marketplace</p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <p class="copyright">Copyright 2025 BuildMatch | Powered by Velrion Media</p>
+        </footer>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-val[data-target]');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+
+                let current = 0;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current).toLocaleString() + (target > 1000 ? '+' : '+');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target.toLocaleString() + '+';
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        // Start counters when hero is visible
+        const heroSection = document.querySelector('#hero');
+        const heroObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting) {
+                animateCounters();
+                heroObserver.disconnect();
+            }
+        });
+        heroObserver.observe(heroSection);
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const isActive = item.classList.contains('active');
+
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Form Handling
+        const form = document.getElementById('leadForm');
+        const spinner = document.getElementById('btnSpinner');
+        const successState = document.getElementById('form-success');
+        const toast = document.getElementById('toast');
+
+        function showToast(msg) {
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Show loading
+            spinner.style.display = 'inline-block';
+            form.querySelector('button').disabled = true;
+
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: json
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    form.style.display = 'none';
+                    successState.style.display = 'block';
+                } else {
+                    showToast("Kuch galat hua. Please dobara try karein.");
+                }
+            } catch (error) {
+                showToast("Network error. Internet check karein.");
+            } finally {
+                spinner.style.display = 'none';
+                form.querySelector('button').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
