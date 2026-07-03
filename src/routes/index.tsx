@@ -46,7 +46,7 @@ function Navbar() {
     }`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div className="text-2xl md:text-3xl font-black tracking-tighter text-white flex items-center gap-2">
-          BUILD<span className="text-orange-accent">MATCH</span>
+          VELRION
         </div>
         <div className="hidden md:flex items-center gap-10">
           <a href="#how-it-works" className="text-sm font-bold text-white/60 hover:text-white transition-colors">Kaise Kaam Karta Hai?</a>
@@ -221,7 +221,7 @@ function Registration() {
         body: JSON.stringify({
           access_key: "007d77ca-1ca1-470e-8e35-c37d1dd77da2", // Bhai, yahan apni Web3Forms key daal dena
           ...data,
-          subject: "New BuildMatch Contractor Registration - " + data.name
+          subject: "New Velrion Contractor Registration - " + data.name
         })
       });
       if (res.ok) setStatus("success");
@@ -345,7 +345,7 @@ function Footer() {
       <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-primary via-orange-accent to-blue-primary opacity-50" />
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-center md:text-left">
         <div>
-          <div className="text-3xl font-black tracking-tighter text-white mb-4">BUILDMATCH</div>
+          <div className="text-3xl font-black tracking-tighter text-white mb-4">VELRION</div>
           <p className="text-white/40 text-lg font-medium">Delhi NCR ka #1 Contractor Marketplace</p>
         </div>
         <div className="flex gap-12 text-sm font-black text-white/40 uppercase tracking-widest">
@@ -354,7 +354,7 @@ function Footer() {
           <a href="#" className="hover:text-white transition-colors">Contact</a>
         </div>
         <div className="text-white/20 text-xs font-black tracking-widest">
-          © 2025 BUILDMATCH | POWERED BY VELRION MEDIA
+          © 2025 VELRION | POWERED BY VELRION MEDIA
         </div>
       </div>
     </footer>
